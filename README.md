@@ -19,8 +19,7 @@
 
 ## 📸 Preview
 
-<!-- Replace the path below with your actual screenshot -->
-![JSRecon Screenshot](screenshot.png)
+![JSRecon Screenshot](Scanner.png)
 
 ---
 
