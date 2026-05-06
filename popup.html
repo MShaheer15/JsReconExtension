@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JSRecon — JavaScript Reconnaissance</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- ═══════════════════ HEADER ═══════════════════ -->
+  <header class="header">
+    <div class="header-brand">
+      <svg class="header-logo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+        <path d="M2 17l10 5 10-5"/>
+        <path d="M2 12l10 5 10-5"/>
+      </svg>
+      <div>
+        <h1 class="header-title">JSRecon</h1>
+        <p class="header-subtitle">JavaScript Reconnaissance Tool</p>
+      </div>
+    </div>
+    <span class="header-version">v1.0.0</span>
+  </header>
+
+  <!-- ═══════════════════ DISCLAIMER ═══════════════════ -->
+  <div class="disclaimer">
+    <svg class="disclaimer-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/>
+      <line x1="12" y1="9" x2="12" y2="13"/>
+      <line x1="12" y1="17" x2="12.01" y2="17"/>
+    </svg>
+    <span>For authorized security testing only</span>
+  </div>
+
+  <!-- ═══════════════════ TARGET INFO ═══════════════════ -->
+  <div class="target-info" id="targetInfo">
+    <span class="target-label">TARGET</span>
+    <span class="target-url" id="targetUrl">—</span>
+  </div>
+
+  <!-- ═══════════════════ ACTIONS ═══════════════════ -->
+  <div class="actions">
+    <button class="btn btn-primary" id="btnScan">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+        <circle cx="11" cy="11" r="8"/>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+      </svg>
+      Start Scan
+    </button>
+    <button class="btn btn-secondary" id="btnCopyAll" disabled>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+        <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
+      </svg>
+      Copy
+    </button>
+    <button class="btn btn-secondary" id="btnExport" disabled>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+        <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
+        <polyline points="7 10 12 15 17 10"/>
+        <line x1="12" y1="15" x2="12" y2="3"/>
+      </svg>
+      Export JSON
+    </button>
+  </div>
+
+  <!-- ═══════════════════ STATUS ═══════════════════ -->
+  <div class="status-bar" id="statusBar">
+    <span class="status-text" id="statusText">Ready to scan</span>
+    <div class="progress-container" id="progressContainer" style="display:none;">
+      <div class="progress-bar" id="progressBar"></div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════ TABS ═══════════════════ -->
+  <div class="tabs">
+    <button class="tab active" data-tab="files" id="tabFiles">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+        <path d="M13 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V9z"/>
+        <polyline points="13 2 13 9 20 9"/>
+      </svg>
+      JS Files <span class="tab-count" id="countFiles">0</span>
+    </button>
+    <button class="tab" data-tab="secrets" id="tabSecrets">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+        <path d="M7 11V7a5 5 0 0110 0v4"/>
+      </svg>
+      Secrets <span class="tab-count" id="countSecrets">0</span>
+    </button>
+    <button class="tab" data-tab="endpoints" id="tabEndpoints">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+        <circle cx="12" cy="12" r="10"/>
+        <line x1="2" y1="12" x2="22" y2="12"/>
+        <path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/>
+      </svg>
+      Endpoints <span class="tab-count" id="countEndpoints">0</span>
+    </button>
+  </div>
+
+  <!-- ═══════════════════ RESULTS ═══════════════════ -->
+  <div class="results-container">
+    <!-- JS Files Panel -->
+    <div class="results-panel active" id="panelFiles">
+      <div class="empty-state" id="emptyFiles">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="40" height="40">
+          <circle cx="11" cy="11" r="8"/>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+        <p>Click <strong>Start Scan</strong> to discover JavaScript assets</p>
+      </div>
+      <div class="results-list" id="listFiles"></div>
+    </div>
+
+    <!-- Secrets Panel -->
+    <div class="results-panel" id="panelSecrets">
+      <div class="empty-state" id="emptySecrets">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="40" height="40">
+          <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+          <path d="M7 11V7a5 5 0 0110 0v4"/>
+        </svg>
+        <p>No secrets detected yet</p>
+      </div>
+      <div class="results-list" id="listSecrets"></div>
+    </div>
+
+    <!-- Endpoints Panel -->
+    <div class="results-panel" id="panelEndpoints">
+      <div class="empty-state" id="emptyEndpoints">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="40" height="40">
+          <circle cx="12" cy="12" r="10"/>
+          <line x1="2" y1="12" x2="22" y2="12"/>
+          <path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/>
+        </svg>
+        <p>No endpoints extracted yet</p>
+      </div>
+      <div class="results-list" id="listEndpoints"></div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════ STATS FOOTER ═══════════════════ -->
+  <footer class="footer" id="footer" style="display:none;">
+    <div class="stats">
+      <div class="stat">
+        <span class="stat-value" id="statTotal">0</span>
+        <span class="stat-label">Files</span>
+      </div>
+      <div class="stat">
+        <span class="stat-value" id="statScanned">0</span>
+        <span class="stat-label">Scanned</span>
+      </div>
+      <div class="stat">
+        <span class="stat-value" id="statSecrets">0</span>
+        <span class="stat-label">Secrets</span>
+      </div>
+      <div class="stat">
+        <span class="stat-value" id="statEndpoints">0</span>
+        <span class="stat-label">Endpoints</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Toast notification -->
+  <div class="toast" id="toast"></div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
