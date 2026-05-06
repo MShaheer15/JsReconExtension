@@ -107,7 +107,7 @@ User clicks "Start Scan"
 1. **Clone this repository:**
 
    ```bash
-   git clone https://github.com/YOUR_USERNAME/JSRecon.git
+   git clone https://github.com/MShaheer15/JsReconExtension.git
    ```
 
 2. **Open Chrome** and navigate to:
